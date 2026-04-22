@@ -823,8 +823,8 @@
         
       tarc1=round(m*g1*(1-k)/2,2)*2; //tooth arc length
       tarc2=round(m*g2*(1-k)/2,2)*2;
-      corr1=Math.hypot(daa1/2,ct1/2)-dtop1/2;
-      corr2=Math.hypot(daa2/2,ct2/2)-dtop2/2; //correction value (takes into account the longer diagonal on the n-gon from other gear)
+      corr1=Math.hypot(daa2/2,ct2/2)-dtop2/2;
+      corr2=Math.hypot(daa1/2,ct1/2)-dtop1/2; //correction value (takes into account the longer diagonal on the n-gon from other gear)
       th=2.2*m;
       th1=round(2.2*m-corr1,2); //corrected tooth height
       th2=round(2.2*m-corr2,2);
