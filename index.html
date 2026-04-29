@@ -855,8 +855,8 @@
       m>0 &&
       hp1>0.05 &&
       hp2>0.05 &&
-      dp1%m<0.1 && //allows a very small tolerance for teeth (shouldnt cause problems)
-      dp2%m<0.1 &&
+      (dp1%m<0.1 || round(dp1%m,1)==m) && //allows a very small tolerance for teeth (shouldnt cause problems)
+      (dp2%m<0.1 || round(dp2%m,1)==m) &&
       n1>=6 &&
       n2>=6 &&
       odd1==false &&
