@@ -121,7 +121,7 @@
       }
 
       odd=(n_teeth%2)===1
-      
+
       if(t==='external') {
         inner_d=round((d-2.4*m)/2)*2
         outer_d=round((d+2*m)/2)*2
@@ -230,6 +230,12 @@
               }
             }
           }
+        } else if (tp[0]<0.06 || tp[1]<0.05 || op[0]<0.06 || op[1]<0.05) {
+          out=`ERROR: One of the part's dimensions get smaller then 0.05 (impossible to make)\n`
+          out+=` -Tooth: ${tp[0]} x ${tp[1]}\n`
+          out+=` -Other: ${op[0]} x ${op[1]}\n`
+        } else {
+          out=`ERROR: Unknown, comment your values\n`
         }
       }
 
