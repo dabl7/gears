@@ -88,7 +88,7 @@
   <button id="calc_bevel" style="display:none;">Calculate</button>
 
   <pre style="font-size: 20px;font-weight: normal" id="output">(Choose a mode)</pre>
-  <br><pre style="font-size: 9px;">v1.2.2 (YouTube: @dabl2829)</pre>
+  <br><pre style="font-size: 9px;">v1.3.0 (YouTube: @dabl2829)</pre>
 
   <script>
     //combined gears calculator (by @dabl2928 on youtube)
@@ -99,8 +99,11 @@
     //v1.2.0 - slightly rewrote some parts, added module recommender for spur gears (2026 May 3)
     //v1.2.1 - added links for youtube videos (2026 Jun 4)
     //v1.2.2 - added link to new video simpler tutorial (2026 Jul 26)
+    //v1.3.0 - 3 decimal update (2026 Aug 8)	
 
-    function round(n,d=2) {
+    decimals=3 //number of decimals to round to
+
+    function round(n,d=decimals) {
       p=Math.pow(10,d)
       return Math.round(n*p)/p
     }
@@ -170,7 +173,7 @@
         op=[circle_piece,thickness] //other part: width x inner thickness}
       }
 
-      deg=round(360/n_teeth)
+      deg=round(360/n_teeth,2)
 
       valid=(m>0 && d>0 && thickness>0 && isNearlyInteger(d/m) && n_teeth>=4 &&
       tp[0]>=0.06 &&
@@ -213,7 +216,7 @@
         out+=`Tooth length: ${tooth_arc_length}  (amount in scale: ${AIS2})\n`
         out+=`Tooth height: ${tooth_height}  (amount in scale: ${AIS3})\n`
 
-        out+=`\nDegrees for rotating and cloning: ${deg}\n`
+        out+=`\nDegrees for rotating and cloning: ${round(deg,2)}\n`
 
         out+='\n==========CHECK-DIMENSIONS=========='
         out+=`\nTooth part dimensions: ${tp[0]} x ${tp[1]} x (ANY)\n`
@@ -404,15 +407,15 @@
         AIS_1 = round(inner_d/2-1) //inner diameter
         outer_d = round(d+2*m)
 
-        circle_piece = round(inner_d*Math.tan(Math.PI/n))
+        circle_piece = round(inner_d*Math.tan(Math.PI/n)/2)*2
         AIS_0 = round(circle_piece/2-1) //circle piece
         
         pitch = round(m*Math.PI)
         gamma = round(180/Math.PI*Math.atan(m/inner_d))
         middle_part = round(0.5*m*Math.PI)
 
-        tooth_height = round(2.2*m,2)
-        AIS_2 = round(tooth_height-2,2) //tooth height
+        tooth_height = round(2.2*m)
+        AIS_2 = round(tooth_height-2) //tooth height
 
         tooth_top = round(outer_d*Math.tan(Math.PI/n))
         AIS_3 = round(tooth_top/2-1) //circle piece but for tooth
@@ -443,7 +446,7 @@
         out+=`Module: ${m}\n\n`
         out+=`Circle piece: ${circle_piece}  (amount in scale: ${AIS_0} for both sides)\n`
         out+=`Inner diameter: ${inner_d}  (amount in scale: ${AIS_1} for both sides)\n\n`
-        out+=`Helical angle: ${gamma}\n`
+        out+=`Helical angle: ${round(gamma,2)}\n`
         out+=`Tooth height: ${tooth_height} (amount in scale: ${AIS_2})\n`
         out+=`Tooth top length: ${tooth_top} (amount in scale: ${AIS_3} for both sides)\n`
         out+=`Tooth width: ${tooth_width} (amount in scale: ${AIS_4} for both sides)\n`
@@ -451,8 +454,8 @@
         out+=`-180 degrees: ${round(pitch/2)} once\n`
         out+=`-90 degree: ${round(pitch/4)} once\n`
         out+=`-45 degree: ${round(pitch/8)} once\n`
-        out+=`-15 degree: ${round(pitch/24)} three times\n`
-        if (q==5) {out+=`-5 degree: ${round(pitch/72)} three times\n`}
+        out+=`-15 degree: ${round(pitch/24)} two times\n`
+        if (q==5) {out+=`-5 degree: ${round(pitch/72)} two times\n`}
         out+=`\nFull pitch: ${pitch}  (${blocks} blocks per pitch/loop)\n`
         out+=`\n==========CHECK-DIMENSIONS==========\n`
         out+=`Center part: ${t_x} x ${t_y}\n`
@@ -723,19 +726,19 @@
       da2=dp2-2*Math.sin((angle2)*pi/180)*(1.2*m)
       dtop1=da1*(1-k) //top diameter (after only trimming)
       dtop2=da2*(1-k)
-      daa1=round(da1*(1-k)/2,2)*2 //top diameter (after trimming)
-      daa2=round(da2*(1-k)/2,2)*2
-      la1=round(hyp*k/Math.cos(dangle*pi/180),2) //part length (root hypotenuse)
-      la2=round(hyp*k/Math.cos(dangle*pi/180),2)
-      ta1=round(1.5*m,2) //could be improved, kind of guessed now
-      ta2=round(1.5*m,2)
-      ca1=round(daa1*Math.tan(pi/n1)/2,2)*2 //circle piece angled piece
-      ca2=round(daa2*Math.tan(pi/n2)/2,2)*2
+      daa1=round(da1*(1-k)/2)*2 //top diameter (after trimming)
+      daa2=round(da2*(1-k)/2)*2
+      la1=round(hyp*k/Math.cos(dangle*pi/180)) //part length (root hypotenuse)
+      la2=round(hyp*k/Math.cos(dangle*pi/180))
+      ta1=round(1.5*m) //could be improved, kind of guessed now
+      ta2=round(1.5*m)
+      ca1=round(daa1*Math.tan(pi/n1)/2)*2 //circle piece angled piece
+      ca2=round(daa2*Math.tan(pi/n2)/2)*2
 
-      ht1=round(hp1*k-Math.sin((a-angle1)*pi/180)*1.2*m*(1-k)+hb1,2) //height of the upper cylinder
-      ht2=round(hp2*k-Math.sin((a-angle2)*pi/180)*1.2*m*(1-k)+hb2,2)
-      ct1=round(daa1*Math.tan(pi/n1)/2,2)*2 //circle piece of the upper cylinder
-      ct2=round(daa2*Math.tan(pi/n2)/2,2)*2
+      ht1=round(hp1*k-Math.sin((a-angle1)*pi/180)*1.2*m*(1-k)+hb1) //height of the upper cylinder
+      ht2=round(hp2*k-Math.sin((a-angle2)*pi/180)*1.2*m*(1-k)+hb2)
+      ct1=round(daa1*Math.tan(pi/n1)/2)*2 //circle piece of the upper cylinder
+      ct2=round(daa2*Math.tan(pi/n2)/2)*2
 
       di1=dp1/Math.cos(deg1*pi/180) //imaginary diameter
       di2=dp1/Math.cos(deg2*pi/180)
@@ -756,13 +759,13 @@
       else if (ni2<=57){g2=1}
       else {g2=1.1}
         
-      tarc1=round(m*g1*(1-k)/2,2)*2 //tooth arc length
-      tarc2=round(m*g2*(1-k)/2,2)*2
+      tarc1=round(m*g1*(1-k)/2)*2 //tooth arc length
+      tarc2=round(m*g2*(1-k)/2)*2
       corr1=Math.hypot(daa1/2,ct1/2)-dtop1/2
       corr2=Math.hypot(daa2/2,ct2/2)-dtop2/2 //correction value (takes into account the longer diagonal on the n-gon from other gear)
       th=2.2*m
-      th1=round(2.2*m-corr1,2) //corrected tooth height
-      th2=round(2.2*m-corr2,2)
+      th1=round(2.2*m-corr1) //corrected tooth height
+      th2=round(2.2*m-corr2)
         
       v1=hyp/Math.cos(dangle*pi/180)*k*Math.sin((angle1+dangle)*pi/180)
       v2=hyp/Math.cos(dangle*pi/180)*k*Math.sin((angle2+dangle)*pi/180)
@@ -860,15 +863,15 @@
         out+=` 1. Top thickness: ${round(u1[1])}  (amount in scale: ${round(u1[1]-2)})\n`
         out+=` 1. Top circle piece: ${round(u1[2])}  (amount in scale: ${round(u1[2]/2-1)}, both sides)\n\n`
         
-        out+=` 1. Mirror 2x and angle ${round(tilt1)} degrees on corner\n`
+        out+=` 1. Mirror 2x and angle ${round(tilt1),2} degrees on corner\n`
         out+=` 1. Slope length: ${round(a1[0])}  (amount in scale: ${round(a1[0]-u1[0])})\n` //or 4x mirror
         out+=` 1. Slope depth: ${round(a1[1])}  (amount in scale: ${round(a1[1]-u1[1])})\n\n`
         
-        out+=` 1. Mirror slope 2x and angle ${round(align)} degrees on outer corner\n`
+        out+=` 1. Mirror slope 2x and angle ${round(align),2} degrees on outer corner\n`
         out+=` 1. Tooth height: ${round(t1[1])}  (amount in scale: ${round(t1[1]-a1[1])})\n`
         out+=` 1. Tooth width: ${round(t1[2])}  (amount in scale: ${round((t1[2]-a1[2])/2)}, both sides)\n\n`
         
-        out+=` 1. Degrees for rotating and cloning: ${round(deg1)}\n\n`
+        out+=` 1. Degrees for rotating and cloning: ${round(deg1,2)}\n\n`
         
         out+=`===FIRST-GEAR-DIMENSIONS===\n`
         out+=`1. Top part: ${round(u1[0])} x ${round(u1[1])} x ${round(u1[2])}\n`
@@ -885,15 +888,15 @@
         out+=` 2. Top thickness: ${round(u2[1])}  (amount in scale: ${round(u2[1]-2)})\n`
         out+=` 2. Top circle piece: ${round(u2[2])}  (amount in scale: ${round(u2[2]/2-1)}, both sides)\n\n`
         
-        out+=` 2. Mirror 2x and angle ${round(tilt2)} degrees on corner\n`
+        out+=` 2. Mirror 2x and angle ${round(tilt2),2} degrees on corner\n`
         out+=` 2. Slope length: ${round(a2[0])}  (amount in scale: ${round(a2[0]-u2[0])})\n` //or 4x mirror
         out+=` 2. Slope depth: ${round(a2[1])}  (amount in scale: ${round(a2[1]-u2[1])})\n\n`
         
-        out+=` 2. Mirror slope 2x and angle ${round(align)} degrees on outer corner\n`
+        out+=` 2. Mirror slope 2x and angle ${round(align),2} degrees on outer corner\n`
         out+=` 2. Tooth height: ${round(t2[1])}  (amount in scale: ${round(t2[1]-a2[1])})\n`
         out+=` 2. Tooth width: ${round(t2[2])}  (amount in scale: ${round((t2[2]-a2[2])/2)}, both sides)\n\n`
         
-        out+=` 2. Degrees for rotating and cloning: ${round(deg2)}\n\n`
+        out+=` 2. Degrees for rotating and cloning: ${round(deg2),2}\n\n`
         
         out+=`===SECOND-GEAR-DIMENSIONS===\n`
         out+=`2. Top part: ${round(u2[0])} x ${round(u2[1])} x ${round(u2[2])}\n`
